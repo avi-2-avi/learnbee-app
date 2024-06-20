@@ -1,6 +1,9 @@
 import React from "react";
 import { useStorageState } from "../hooks/useStorageState";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  signOut as firebaseSignOut,
+} from "firebase/auth";
 import { auth } from "../firebaseConfig";
 
 // Define the AuthContext type
@@ -52,8 +55,13 @@ export function SessionProvider(props: React.PropsWithChildren) {
             });
         },
         signOut: async () => {
-          await auth.signOut();
-          setSession(null);
+          await firebaseSignOut(auth)
+            .then(() => {
+              setSession(null);
+            })
+            .catch((error) => {
+              console.error("Sign out error", error);
+            });
         },
         session,
         isLoading,
