@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { Button, StyleSheet, TextInput, View, Text } from "react-native";
+import { Image, TextInput, View, Text } from "react-native";
 import { router } from "expo-router";
 import { useSession } from "../context/ctx";
 import React from "react";
+import { CustomButton } from "@/components/common/CustomButton";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function Login() {
   const { signIn, session } = useSession();
@@ -14,6 +16,10 @@ export default function Login() {
     signIn(email, password);
   };
 
+  const handleGotoRegister = () => {
+    router.replace("register");
+  };
+
   useEffect(() => {
     if (session) {
       router.replace("(app)");
@@ -21,38 +27,37 @@ export default function Login() {
   }, [session]);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login Screen</Text>
+    <View className="flex flex-1 items-center justify-center w-[70%] mx-auto">
+      <Image
+        className="h-48 w-auto"
+        source={require("../assets/images/bee.png")}
+      />
       <TextInput
-        style={{ backgroundColor: "white", width: "80%", padding: 10 }}
-        placeholder="Email"
+        className="w-full p-4 border-yellow border-[1rem] rounded-lg mb-4"
+        placeholder="Correo Electrónico"
         keyboardType="email-address"
         onChangeText={(text) => setEmail(text)}
       />
       <TextInput
-        style={{ backgroundColor: "white", width: "80%", padding: 10 }}
-        placeholder="Password"
+        className="w-full p-4 border-yellow border-[1rem] rounded-lg mb-2"
+        placeholder="Contraseña"
         secureTextEntry
         onChangeText={(text) => setPassword(text)}
       />
-      <Button title={"Login"} onPress={handleLogin} />
+      <Text className="text-xs font-light mb-4">¿Olvidó la contraseña?</Text>
+      <CustomButton title="Ingresar" onPress={handleLogin}></CustomButton>
+      <Text className="my-4">ó</Text>
+      <CustomButton onPress={handleLogin} type="secondary">
+        <View className="flex flex-row items-center space-x-8">
+          <Ionicons name="logo-google" size={24} color="black" />
+          <Text>Ingresa con Google</Text>
+        </View>
+      </CustomButton>
+      <Text></Text>
+      <CustomButton
+        title="Registrarse"
+        onPress={handleGotoRegister}
+      ></CustomButton>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-  },
-});

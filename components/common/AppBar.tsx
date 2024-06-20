@@ -4,7 +4,7 @@ import { Link } from "expo-router";
 
 export const AppBar = () => {
   return (
-    <View className="bg-yellow w-full h-18 flex flex-row justify-between items-center px-6 pt-4 pb-6 rounded-b-full">
+    <View className="bg-yellow w-full h-18 flex flex-row justify-between items-center px-6 pt-8 pb-6 rounded-b-full">
       <Link
         href={{
           pathname: "(app)/(profile)/[id]",

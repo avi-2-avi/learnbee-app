@@ -21,5 +21,12 @@ export default function AppLayout() {
   }
 
   // This layout can be deferred because it's not the root layout.
-  return <Stack />;
+  return (
+    <Stack
+      screenOptions={{
+        // Hide the header for all other routes.
+        headerShown: false,
+      }}
+    />
+  );
 }
