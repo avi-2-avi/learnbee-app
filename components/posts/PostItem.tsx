@@ -23,7 +23,7 @@ export const PostItem: React.FC<PostItemProps> = ({
 }) => {
   return (
     <ScrollView className="w-full border-black border-t-[1px] py-4">
-      <View className="px-6">
+      <View className="px-8">
         <View className="flex flex-row justify-between">
           <View className="flex flex-row items-center space-x-2">
             <Image
@@ -33,7 +33,7 @@ export const PostItem: React.FC<PostItemProps> = ({
               }}
             />
             <View className="flex flex-col">
-              <Text className="font-semibold">{name}</Text>
+              <Text className="font-medium">{name}</Text>
             </View>
           </View>
           <RatingIcons rating={rating} />

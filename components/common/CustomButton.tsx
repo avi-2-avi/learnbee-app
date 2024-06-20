@@ -14,6 +14,7 @@ interface ButtonProps extends TouchableOpacityProps {
   textStyle?: StyleProp<TextStyle>;
   type?: "primary" | "secondary";
   children?: React.ReactNode;
+  flatten?: boolean;
 }
 
 export const CustomButton: React.FC<ButtonProps> = ({
@@ -23,10 +24,12 @@ export const CustomButton: React.FC<ButtonProps> = ({
   textStyle,
   type = "primary", // Default color
   children,
+  flatten,
   ...props
 }) => {
   let colorClass = "";
   let textColor = "";
+  let buttonStyle = "";
 
   if (type === "primary") {
     colorClass = "bg-yellow text-black";
@@ -36,9 +39,15 @@ export const CustomButton: React.FC<ButtonProps> = ({
     textColor = "text-black";
   }
 
+  if (flatten) {
+    buttonStyle = "rounded-full py-1";
+  } else {
+    buttonStyle = "rounded-md py-3";
+  }
+
   return (
     <TouchableOpacity
-      className={`py-3 px-4 rounded-md items-center w-full justify-center ${colorClass}`}
+      className={`px-4 items-center w-full justify-center ${colorClass} ${buttonStyle}`}
       onPress={onPress}
       style={style}
       {...props}
