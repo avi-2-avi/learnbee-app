@@ -5,7 +5,7 @@ import { PostItem } from "./PostItem";
 
 export const PostList = () => {
   return (
-    <View className="w-full flex flex-col my-2">
+    <View className="w-full flex flex-col my-2 mb-36">
       <FlatList
         data={posts}
         renderItem={({ item }) => (

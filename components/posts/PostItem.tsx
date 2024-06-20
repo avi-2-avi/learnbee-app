@@ -1,7 +1,8 @@
 import Ionicons from "@expo/vector-icons/build/Ionicons";
 import React from "react";
-import { Text, View, Image } from "react-native";
+import { Text, View, Image, ScrollView } from "react-native";
 import { styled } from "nativewind";
+import { RatingIcons } from "./RatingIcons";
 
 interface PostItemProps {
   photo: string;
@@ -21,7 +22,7 @@ export const PostItem: React.FC<PostItemProps> = ({
   description,
 }) => {
   return (
-    <View className="w-full border-black border-t-[1px] py-4">
+    <ScrollView className="w-full border-black border-t-[1px] py-4">
       <View className="px-6">
         <View className="flex flex-row justify-between">
           <View className="flex flex-row items-center space-x-2">
@@ -35,13 +36,17 @@ export const PostItem: React.FC<PostItemProps> = ({
               <Text className="font-semibold">{name}</Text>
             </View>
           </View>
-          <View className="flex flex-row items-center">
-            <Text>{rating}</Text>
-          </View>
+          <RatingIcons rating={rating} />
         </View>
         <View className="flex flex-row mt-2">
-          <StyledText className="flex basis-1/2">{title}</StyledText>
-          <StyledText className="flex basis-1/2">{description}</StyledText>
+          <View className="flex basis-2/5 h-10">
+            <StyledText className="w-28" numberOfLines={2}>
+              {title}
+            </StyledText>
+          </View>
+          <StyledText className="flex basis-3/5" numberOfLines={2}>
+            {description}
+          </StyledText>
         </View>
         <Image
           className="w-full h-36 mt-2"
@@ -64,6 +69,6 @@ export const PostItem: React.FC<PostItemProps> = ({
           </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };

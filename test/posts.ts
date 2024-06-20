@@ -23,7 +23,7 @@ export const posts = [
     photo:
       "https://organicthemes.com/demo/profile/files/2018/05/profile-pic-132x132.jpg",
     name: "Michael Johnson",
-    rating: 5,
+    rating: 3,
     title: "Best food in town",
     description:
       "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -33,7 +33,7 @@ export const posts = [
     photo:
       "https://organicthemes.com/demo/profile/files/2018/05/profile-pic-132x132.jpg",
     name: "Emily Brown",
-    rating: 4,
+    rating: 2,
     title: "Lovely atmosphere",
     description:
       "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
@@ -43,7 +43,7 @@ export const posts = [
     photo:
       "https://organicthemes.com/demo/profile/files/2018/05/profile-pic-132x132.jpg",
     name: "David Wilson",
-    rating: 5,
+    rating: 1,
     title: "Beautiful scenery",
     description:
       "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
