@@ -3,13 +3,21 @@ import { useStorageState } from "../hooks/useStorageState";
 import {
   signInWithEmailAndPassword,
   signOut as firebaseSignOut,
+  createUserWithEmailAndPassword,
 } from "firebase/auth";
-import { auth } from "../firebaseConfig";
+import { auth, db } from "../firebaseConfig";
+import { doc, setDoc } from "firebase/firestore";
 
 // Define the AuthContext type
 type AuthContextType = {
   signIn: (email: string, password: string) => void;
   signOut: () => void;
+  register: (
+    name: string,
+    email: string,
+    birthDate: Date,
+    password: string,
+  ) => void;
   session?: string | null;
   isLoading: boolean;
 };
@@ -17,6 +25,7 @@ type AuthContextType = {
 const AuthContext = React.createContext<AuthContextType>({
   signIn: () => null,
   signOut: () => null,
+  register: () => null,
   session: null,
   isLoading: false,
 });
@@ -62,6 +71,31 @@ export function SessionProvider(props: React.PropsWithChildren) {
             .catch((error) => {
               console.error("Sign out error", error);
             });
+        },
+        register: async (
+          name: string,
+          email: string,
+          birthDate: Date,
+          password: string,
+        ) => {
+          try {
+            const userCredential = await createUserWithEmailAndPassword(
+              auth,
+              email,
+              password,
+            );
+            const user = userCredential.user;
+            const userDocRef = doc(db, "users", user.uid);
+            await setDoc(userDocRef, {
+              name,
+              email,
+              birthDate: birthDate.toISOString(), // Storing as ISO string
+            });
+            const token = await user.getIdToken();
+            setSession(token);
+          } catch (error) {
+            console.error("Registration error", error);
+          }
         },
         session,
         isLoading,

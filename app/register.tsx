@@ -7,16 +7,20 @@ import {
   TouchableOpacity,
   Platform,
   Modal,
+  Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { router } from "expo-router";
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useSession } from "../context/ctx";
 
 export default function Register() {
+  const { register, session } = useSession();
   const [email, setEmail] = useState<string>("");
+  const [name, setName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const [date, setDate] = useState<Date>(new Date());
@@ -38,6 +42,55 @@ export default function Register() {
     router.replace("login");
   };
 
+  const handleRegister = () => {
+    const isValid = validateInputs();
+    if (isValid) {
+      register(name, email, date, password);
+    }
+  };
+
+  const validateInputs = (): boolean => {
+    let valid = false;
+    const eighteenYearsAgo = new Date();
+    eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
+
+    const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])/;
+
+    if (!name) {
+      Alert.alert("Error de validación", "El nombre es requerido");
+    } else if (!email) {
+      Alert.alert("Error de validación", "El correo es requerido");
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      Alert.alert("Error de validación", "El correo no es válido");
+    } else if (!dateText) {
+      Alert.alert("Error de validación", "La fecha de nacimiento es requerida");
+    } else if (date > eighteenYearsAgo) {
+      Alert.alert("Error de validación", "Debes tener al menos 18 años");
+    } else if (!password) {
+      Alert.alert("Error de validación", "La contraseña es requerida");
+    } else if (password.length < 6) {
+      Alert.alert(
+        "Error de validación",
+        "La contraseña debe tener al menos 6 caracteres",
+      );
+    } else if (!passwordRegex.test(password)) {
+      Alert.alert(
+        "Error de validación",
+        "La contraseña debe tener al menos un número y un carácter especial",
+      );
+    } else {
+      valid = true;
+    }
+
+    return valid;
+  };
+
+  useEffect(() => {
+    if (session) {
+      router.replace("(app)");
+    }
+  }, [session]);
+
   return (
     <View className="flex flex-1 items-center justify-center w-[70%] mx-auto">
       <Image
@@ -49,7 +102,7 @@ export default function Register() {
         className="w-full p-4 border-yellow border-[1rem] rounded-lg mb-3"
         placeholder="Nombre y Apellidos"
         autoCapitalize="none"
-        onChangeText={(text) => setEmail(text)}
+        onChangeText={(text) => setName(text)}
       />
       <Text className="w-full mb-1">Correo</Text>
       <TextInput
@@ -111,9 +164,9 @@ export default function Register() {
           />
         </TouchableOpacity>
       </View>
-      <CustomButton title="Continuar" onPress={handleGotoLogin}></CustomButton>
+      <CustomButton title="Continuar" onPress={handleRegister}></CustomButton>
       <Text className="my-4">ó</Text>
-      <CustomButton onPress={handleGotoLogin} type="secondary">
+      <CustomButton onPress={handleRegister} type="secondary">
         <View className="flex flex-row items-center space-x-8">
           <Ionicons name="logo-google" size={24} color="black" />
           <Text>Continuar con Google</Text>

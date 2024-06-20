@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { Image, TextInput, View, Text, TouchableOpacity } from "react-native";
+import {
+  Image,
+  TextInput,
+  View,
+  Text,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import { router } from "expo-router";
 import { useSession } from "../context/ctx";
 import React from "react";
@@ -14,11 +21,44 @@ export default function Login() {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
 
   const handleLogin = async () => {
-    signIn(email, password);
+    const isValid = validateInputs();
+    if (isValid) {
+      signIn(email, password);
+    }
   };
 
   const handleGotoRegister = () => {
     router.replace("register");
+  };
+
+  const validateInputs = (): boolean => {
+    let valid = false;
+    const eighteenYearsAgo = new Date();
+    eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
+
+    const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])/;
+
+    if (!email) {
+      Alert.alert("Error de validación", "El correo es requerido");
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      Alert.alert("Error de validación", "El correo no es válido");
+    } else if (!password) {
+      Alert.alert("Error de validación", "La contraseña es requerida");
+    } else if (password.length < 6) {
+      Alert.alert(
+        "Error de validación",
+        "La contraseña debe tener al menos 6 caracteres",
+      );
+    } else if (!passwordRegex.test(password)) {
+      Alert.alert(
+        "Error de validación",
+        "La contraseña debe tener al menos un número y un carácter especial",
+      );
+    } else {
+      valid = true;
+    }
+
+    return valid;
   };
 
   useEffect(() => {
