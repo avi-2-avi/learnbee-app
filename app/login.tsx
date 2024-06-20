@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, StyleSheet, TextInput, View, Text } from "react-native";
 import { router } from "expo-router";
 import { useSession } from "../context/ctx";
+import React from "react";
 
 export default function Login() {
   const { signIn, session } = useSession();
@@ -9,16 +10,15 @@ export default function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const handleLogin = () => {
-    console.log("Before: ", email, password);
+  const handleLogin = async () => {
     signIn(email, password);
-    if (session) {
-      console.log(session);
-      router.replace("(app)");
-    } else {
-      console.log("Failed to change session");
-    }
   };
+
+  useEffect(() => {
+    if (session) {
+      router.replace("(app)");
+    }
+  }, [session]);
 
   return (
     <View style={styles.container}>

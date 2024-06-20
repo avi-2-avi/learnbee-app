@@ -1,6 +1,7 @@
 import React from "react";
 import { useStorageState } from "../hooks/useStorageState";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebaseConfig";
 
 // Define the AuthContext type
 type AuthContextType = {
@@ -34,15 +35,12 @@ export function SessionProvider(props: React.PropsWithChildren) {
   return (
     <AuthContext.Provider
       value={{
-        signIn: (email: string, password: string) => {
-          // Perform sign-in logic here
-          const auth = getAuth();
-          signInWithEmailAndPassword(auth, email, password)
+        signIn: async (email: string, password: string) => {
+          await signInWithEmailAndPassword(auth, email, password)
             .then(async (userCredential) => {
               // Signed in
               const user = userCredential.user;
               const token = await user.getIdToken();
-              console.log(user);
               setSession(token);
             })
             .catch((error) => {
@@ -53,7 +51,8 @@ export function SessionProvider(props: React.PropsWithChildren) {
               setSession(null);
             });
         },
-        signOut: () => {
+        signOut: async () => {
+          await auth.signOut();
           setSession(null);
         },
         session,
