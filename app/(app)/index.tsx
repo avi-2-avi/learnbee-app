@@ -5,7 +5,7 @@ import { View } from "react-native";
 
 export default function Index() {
   return (
-    <View className="flex flex-col">
+    <View className="flex flex-col bg-white">
       <AppBar />
       <PostList />
       <OptionsButton />

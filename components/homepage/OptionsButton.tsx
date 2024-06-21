@@ -1,13 +1,17 @@
-import { useSession } from "../../context/ctx";
 import { useState } from "react";
 import { View, Text, TouchableOpacity, Modal } from "react-native";
+import { router } from "expo-router";
 
 export const OptionsButton = () => {
-  const { signOut } = useSession();
   const [menuVisible, setMenuVisible] = useState(false);
 
-  const handleSignOut = () => {
-    signOut();
+  const handleGoToPostCreation = () => {
+    router.navigate("(post)/create");
+    setMenuVisible(false);
+  };
+
+  const handleGoToSurveyCreation = () => {
+    router.navigate("(survey)/create");
     setMenuVisible(false);
   };
 
@@ -33,13 +37,13 @@ export const OptionsButton = () => {
         >
           <View className="absolute right-4 bottom-28 bg-white px-5 py-2 w-1/2 rounded-lg">
             <TouchableOpacity
-              onPress={() => setMenuVisible(false)}
+              onPress={handleGoToPostCreation}
               className="w-full border-b py-3"
             >
               <Text>Crear proyecto</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => setMenuVisible(false)}
+              onPress={handleGoToSurveyCreation}
               className="w-full py-3"
             >
               <Text>Crear encuesta</Text>

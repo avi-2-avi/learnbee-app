@@ -68,7 +68,7 @@ export default function Login() {
   }, [session]);
 
   return (
-    <View className="flex flex-1 items-center justify-center w-[70%] mx-auto">
+    <View className="flex flex-1 items-center justify-center w-[80%] mx-auto bg-white">
       <Image
         className="h-48 w-auto"
         source={require("../assets/images/bee.png")}

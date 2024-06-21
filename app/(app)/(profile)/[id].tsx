@@ -11,7 +11,7 @@ export default function DetailsScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <View className="bg-white w-full h-full">
       <Text>Details of user: {id} </Text>
       <TouchableOpacity className="pr-4" onPress={handleGoBack}>
         <Ionicons name="arrow-back" size={24} color="black" />
@@ -19,11 +19,3 @@ export default function DetailsScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
