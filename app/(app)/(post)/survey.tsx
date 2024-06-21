@@ -7,6 +7,7 @@ import { Image, View, Text, TouchableOpacity } from "react-native";
 
 export default function Survey() {
   const [numStudents, setNumStudents] = useState<number>(0);
+  const [showQR, setShowQR] = useState<boolean>(false);
 
   const handleGoBack = () => {
     router.back();
@@ -18,6 +19,10 @@ export default function Survey() {
 
   const handleAddNumStudents = () => {
     setNumStudents(numStudents + 1);
+  };
+
+  const handleShowQR = () => {
+    setShowQR(true);
   };
 
   return (
@@ -36,38 +41,40 @@ export default function Survey() {
             className="basis-1/2"
           ></CustomButton>
           <CustomButton
-            onPress={handleGoBack}
+            onPress={handleShowQR}
             title="Generar QR"
             className="basis-1/2"
           ></CustomButton>
         </View>
-        <View className="w-full items-center mt-10">
-          <Text className="font-medium mb-2">
-            ¡Conéctate con este código QR!
-          </Text>
-          <Text>Usa tu celular para escanearlo</Text>
-          <Image
-            className="mt-2 mb-6"
-            source={require("@/assets/images/qr-code.png")}
-          />
-          <View className="flex flex-row items-center mb-10">
-            <Text className="font-medium mb-2">Encuesta realizada por </Text>
-            <TouchableOpacity
-              onPress={handleAddNumStudents}
-              className="p-2 border-yellow border-[1rem] rounded-lg ml-1 mr-1"
-            >
-              <Text>{numStudents} estudiantes</Text>
-            </TouchableOpacity>
-            <Ionicons name="list" size={24} color="black" />
+        {showQR && (
+          <View className="w-full items-center mt-10">
+            <Text className="font-medium mb-2">
+              ¡Conéctate con este código QR!
+            </Text>
+            <Text>Usa tu celular para escanearlo</Text>
+            <Image
+              className="mt-2 mb-6"
+              source={require("@/assets/images/qr-code.png")}
+            />
+            <View className="flex flex-row items-center mb-10">
+              <Text className="font-medium mb-2">Encuesta realizada por </Text>
+              <TouchableOpacity
+                onPress={handleAddNumStudents}
+                className="p-2 border-yellow border-[1rem] rounded-lg ml-1 mr-1"
+              >
+                <Text>{numStudents} estudiantes</Text>
+              </TouchableOpacity>
+              <Ionicons name="list" size={24} color="black" />
+            </View>
+            <View className="w-full items-end">
+              <CustomButton
+                onPress={handlePublish}
+                title="Publicar"
+                className="w-1/2"
+              ></CustomButton>
+            </View>
           </View>
-          <View className="w-full items-end">
-            <CustomButton
-              onPress={handlePublish}
-              title="Publicar"
-              className="w-1/2"
-            ></CustomButton>
-          </View>
-        </View>
+        )}
       </View>
     </View>
   );
