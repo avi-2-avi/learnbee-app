@@ -1,14 +1,24 @@
-import { View, Image, TouchableOpacity, Modal, Text } from "react-native";
+import {
+  View,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  Modal,
+  Text,
+} from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
 import { useSession } from "@/context/ctx";
 import { CustomButton } from "./CustomButton";
 import { user } from "@/test/user";
 import { router } from "expo-router";
+import { NotificationItem } from "../homepage/NotificationItem";
+import { notifications } from "@/test/notifications";
 
 export const AppBar = () => {
   const { signOut } = useSession();
   const [profileMenuVisible, setProfileMenuVisible] = useState(false);
+  const [notificationMenuVisible, setNotificationMenuVisible] = useState(false);
 
   const handleSignOut = () => {
     signOut();
@@ -32,9 +42,7 @@ export const AppBar = () => {
           className="w-10 h-8"
           source={require("../../assets/images/icon.png")}
         />
-        <TouchableOpacity
-          onPress={() => alert("No hay notificaciones recientes.")}
-        >
+        <TouchableOpacity onPress={() => setNotificationMenuVisible(true)}>
           <Ionicons name="notifications-outline" size={28} color="black" />
         </TouchableOpacity>
       </View>
@@ -71,6 +79,34 @@ export const AppBar = () => {
               onPress={handleSignOut}
               title="Cerrar Sesión"
               type="secondary"
+            />
+          </View>
+        </TouchableOpacity>
+      </Modal>
+      <Modal
+        transparent={true}
+        visible={notificationMenuVisible}
+        animationType="fade"
+        onRequestClose={() => setNotificationMenuVisible(false)}
+      >
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={() => setNotificationMenuVisible(false)}
+          className="flex-1 bg-black/30 justify-end"
+        >
+          <View className="absolute right-10 top-24 bg-white p-5 pb-3 w-[80%] rounded-lg">
+            <Text className="text-lg font-medium mb-4">Notificaciones</Text>
+            <FlatList
+              data={notifications}
+              renderItem={({ item }) => (
+                <NotificationItem
+                  photo={item.photo}
+                  name={item.name}
+                  datetime={item.datetime}
+                  type={item.type}
+                  projectName={item.projectName}
+                />
+              )}
             />
           </View>
         </TouchableOpacity>
