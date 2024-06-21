@@ -2,7 +2,7 @@ import { AppBarBack } from "@/components/common/AppBarBack";
 import { CustomButton } from "@/components/common/CustomButton";
 import { router } from "expo-router";
 import { useState } from "react";
-import { Text, View, TextInput } from "react-native";
+import { Text, View, TextInput, Modal, TouchableOpacity } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
@@ -12,6 +12,7 @@ export default function Create() {
   const [selectedCourse, setSelectedCourse] = useState<string | undefined>(
     undefined,
   );
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   const handleGoBack = () => {
     router.back();
@@ -19,6 +20,18 @@ export default function Create() {
 
   const handleGoNext = () => {
     router.navigate("(post)/survey");
+  };
+
+  const handleOpenModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCourseSelect = (course: string) => {
+    setSelectedCourse(course);
   };
 
   const courses = [
@@ -50,11 +63,24 @@ export default function Create() {
           onChangeText={(text) => setDescription(text)}
         />
         <Text className="w-full mb-1">Curso</Text>
-        <TextInput
-          className="w-full p-4 border-yellow border-[1rem] rounded-lg mb-3"
-          placeholder="¿A qué curso pertenece??"
-          onChangeText={(text) => setDescription(text)}
-        />
+        <TouchableOpacity
+          className="w-full"
+          onPress={handleOpenModal}
+          activeOpacity={1}
+        >
+          <TextInput
+            className="w-full p-4 border-yellow border-[1rem] rounded-lg mb-3"
+            placeholder="¿A qué curso pertenece?"
+            value={
+              selectedCourse
+                ? courses.find((course) => course.value === selectedCourse)
+                    ?.label
+                : ""
+            }
+            editable={false}
+            pointerEvents="none"
+          />
+        </TouchableOpacity>
         <Text className="w-full mb-1">Tema</Text>
         <TextInput
           className="w-full p-4 border-yellow border-[1rem] rounded-lg mb-3"
@@ -92,6 +118,38 @@ export default function Create() {
           ></CustomButton>
         </View>
       </View>
+      <Modal
+        visible={isModalVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={handleCloseModal}
+      >
+        <View className="flex-1 justify-center items-center bg-black/50">
+          <View className="w-3/4 bg-white rounded-lg p-6">
+            <Text className="text-lg font-medium mb-4">
+              Seleccione un curso
+            </Text>
+            <Picker
+              selectedValue={selectedCourse}
+              onValueChange={(itemValue) => handleCourseSelect(itemValue)}
+            >
+              {courses.map((course) => (
+                <Picker.Item
+                  key={course.value}
+                  label={course.label}
+                  value={course.value}
+                />
+              ))}
+            </Picker>
+            <CustomButton
+              onPress={handleCloseModal}
+              title="Cerrar"
+              type="primary"
+              className="mt-4 w-2/3 mx-auto"
+            ></CustomButton>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }

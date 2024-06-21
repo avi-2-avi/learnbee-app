@@ -92,7 +92,7 @@ export default function Register() {
   }, [session]);
 
   return (
-    <View className="flex flex-1 items-center justify-center w-[80%] mx-auto bg-white">
+    <View className="flex flex-1 items-center justify-center w-[80%] mx-auto">
       <Image
         className="h-48 w-auto"
         source={require("../assets/images/bee.png")}
