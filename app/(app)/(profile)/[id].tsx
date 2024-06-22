@@ -1,10 +1,21 @@
 import { useLocalSearchParams } from "expo-router";
-import { View, Text, Share, Alert, Image } from "react-native";
+import { View, Text, Share, Alert, Image, ScrollView } from "react-native";
 import { router } from "expo-router";
 import { AppBarBack } from "@/components/common/AppBarBack";
 import { useState } from "react";
 import { CustomButton } from "@/components/common/CustomButton";
 import { user } from "@/test/user";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { PostList } from "@/components/posts/PostList";
+
+const Tab = createMaterialTopTabNavigator();
+function CompletedProjects() {
+  return <PostList useFullScreenHeight />;
+}
+
+function OngoingProjects() {
+  return <PostList useFullScreenHeight isInProgress />;
+}
 
 export default function DetailsScreen() {
   const [totalProjects, setTotalProjects] = useState(10);
@@ -71,7 +82,7 @@ export default function DetailsScreen() {
           <Text className="text-center">seguiendo</Text>
         </View>
       </View>
-      <View className="flex flex-row space-x-6 mx-auto mt-6">
+      <View className="flex flex-row space-x-6 mx-auto mt-6 mb-2">
         <CustomButton
           onPress={handleGoProfile}
           type="secondary"
@@ -85,6 +96,19 @@ export default function DetailsScreen() {
           className="basis-36"
         ></CustomButton>
       </View>
+      <Tab.Navigator
+        screenOptions={{
+          tabBarIndicatorStyle: {
+            backgroundColor: "black",
+          },
+          tabBarLabelStyle: {
+            textTransform: "capitalize",
+          },
+        }}
+      >
+        <Tab.Screen name="Proyectos Concluidos" component={CompletedProjects} />
+        <Tab.Screen name="Proyectos en Curso" component={OngoingProjects} />
+      </Tab.Navigator>
     </View>
   );
 }
