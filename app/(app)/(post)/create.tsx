@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Text, View, TextInput, Modal, TouchableOpacity } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { courses } from "@/assets/constants/courses";
 
 export default function Create() {
   const [name, setName] = useState<string>("");
@@ -33,13 +34,6 @@ export default function Create() {
   const handleCourseSelect = (course: string) => {
     setSelectedCourse(course);
   };
-
-  const courses = [
-    { label: "Course 1", value: "course1" },
-    { label: "Course 2", value: "course2" },
-    { label: "Course 3", value: "course3" },
-    // Add more courses as needed
-  ];
 
   return (
     <View className="w-full h-full bg-white">
