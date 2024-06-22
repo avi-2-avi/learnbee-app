@@ -12,7 +12,7 @@ interface ButtonProps extends TouchableOpacityProps {
   onPress: () => void | void;
   style?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
-  type?: "primary" | "secondary";
+  type?: "primary" | "secondary" | "dull";
   children?: React.ReactNode;
   flatten?: boolean;
 }
@@ -36,6 +36,9 @@ export const CustomButton: React.FC<ButtonProps> = ({
     textColor = "text-black";
   } else if (type === "secondary") {
     colorClass = "bg-white border-[1rem] border-yellow";
+    textColor = "text-black";
+  } else if (type === "dull") {
+    colorClass = "bg-white border-[1rem] border-black";
     textColor = "text-black";
   }
 
