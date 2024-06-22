@@ -122,7 +122,7 @@ export default function Register() {
             editable={false}
           />
           <TouchableOpacity onPress={showDatepicker} className="pr-4">
-            <Ionicons name="calendar" size={24} color="black" />
+            <Ionicons name="calendar-outline" size={24} color="black" />
           </TouchableOpacity>
         </View>
         <Modal transparent={true} animationType="slide" visible={show}>
