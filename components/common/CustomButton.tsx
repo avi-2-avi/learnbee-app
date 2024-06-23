@@ -5,6 +5,7 @@ import {
   StyleProp,
   ViewStyle,
   TextStyle,
+  StyleSheet
 } from "react-native";
 
 interface ButtonProps extends TouchableOpacityProps {
@@ -30,15 +31,17 @@ export const CustomButton: React.FC<ButtonProps> = ({
   let colorClass = "";
   let textColor = "";
   let buttonStyle = "";
+  let customStyle = style;
 
   if (type === "primary") {
     colorClass = "bg-yellow text-black";
     textColor = "text-black";
   } else if (type === "secondary") {
-    colorClass = "bg-white border-[1rem] border-yellow";
+    colorClass = "bg-white border-yellow";
     textColor = "text-black";
+    customStyle = [style, styles.input];
   } else if (type === "dull") {
-    colorClass = "bg-white border-[1rem] border-black";
+    colorClass = "bg-white border-black";
     textColor = "text-black";
   }
 
@@ -52,7 +55,7 @@ export const CustomButton: React.FC<ButtonProps> = ({
     <TouchableOpacity
       className={`px-4 items-center w-full justify-center ${colorClass} ${buttonStyle}`}
       onPress={onPress}
-      style={style}
+      style={customStyle}
       {...props}
     >
       {title ? (
@@ -63,3 +66,11 @@ export const CustomButton: React.FC<ButtonProps> = ({
     </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  input: {
+    borderColor: "#F9CD14",
+    borderWidth: 1,
+    borderRadius: 10,
+  },
+});

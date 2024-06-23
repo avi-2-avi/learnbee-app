@@ -3,7 +3,7 @@ import { CustomButton } from "@/components/common/CustomButton";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import { useState } from "react";
-import { Image, View, Text, TouchableOpacity } from "react-native";
+import { Image, View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
 export default function Survey() {
   const [numStudents, setNumStudents] = useState<number>(0);
@@ -60,7 +60,8 @@ export default function Survey() {
               <Text className="font-medium mb-2">Encuesta realizada por </Text>
               <TouchableOpacity
                 onPress={handleAddNumStudents}
-                className="p-2 border-yellow border-[1rem] rounded-lg ml-1 mr-1"
+                className="p-2 border-yellow rounded-lg ml-1 mr-1"
+                style={styles.input}
               >
                 <Text>{numStudents} estudiantes</Text>
               </TouchableOpacity>
@@ -79,3 +80,11 @@ export default function Survey() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  input: {
+    borderColor: "#F9CD14",
+    borderWidth: 1,
+    borderRadius: 10,
+  },
+});

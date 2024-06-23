@@ -12,6 +12,7 @@ import {
   TextInput,
   Image,
   Modal,
+  StyleSheet
 } from "react-native";
 
 export default function Create() {
@@ -61,8 +62,9 @@ export default function Create() {
           activeOpacity={1}
         >
           <TextInput
-            className="w-full p-4 border-yellow border-[1rem] rounded-lg mb-3 mt-3"
+            className="w-full p-4 border-yellow rounded-lg mb-3 mt-3"
             placeholder="Selecciona el proyecto"
+            style={styles.input}
             value={selectedProject ? selectedProject : ""}
             editable={false}
             pointerEvents="none"
@@ -82,7 +84,8 @@ export default function Create() {
               <Text className="font-medium mb-2">Encuesta realizada por </Text>
               <TouchableOpacity
                 onPress={handleAddNumStudents}
-                className="p-2 border-yellow border-[1rem] rounded-lg ml-1 mr-1"
+                className="p-2 border-yellow rounded-lg ml-1 mr-1"
+                style={styles.input}
               >
                 <Text>{numStudents} estudiantes</Text>
               </TouchableOpacity>
@@ -133,3 +136,11 @@ export default function Create() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  input: {
+    borderColor: "#F9CD14",
+    borderWidth: 1,
+    borderRadius: 10,
+  },
+});

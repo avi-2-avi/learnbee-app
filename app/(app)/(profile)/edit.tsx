@@ -14,6 +14,8 @@ import {
   TextInput,
   ActivityIndicator,
   TouchableOpacity,
+  StyleSheet,
+  ScrollView
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { uploadUserProfilePicture } from "@/hooks/userActions";
@@ -73,6 +75,9 @@ export default function Edit() {
     <View className="bg-white w-full h-full">
       <AppBarBack />
       {userData ? (
+        <ScrollView>
+
+       
         <View>
           <View className="flex flex-col mx-auto mt-8 mb-8">
             <TouchableOpacity onPress={pickImage}>
@@ -86,21 +91,24 @@ export default function Edit() {
           <View className="w-[80%] mx-auto mb-4 mt-2">
             <Text className="w-full mb-1">Nombre y Apellidos</Text>
             <TextInput
-              className="w-full p-4 border-yellow border-[1rem] rounded-lg mb-3"
+              className="w-full p-4 border-yellow rounded-lg mb-3"
               editable={false}
+              style={styles.input}
               value={userData.name}
             />
             <Text className="w-full mb-1">Correo</Text>
             <TextInput
-              className="w-full p-4 border-yellow border-[1rem] rounded-lg mb-3"
+              className="w-full p-4 border-yellow rounded-lg mb-3"
               editable={false}
+              style={styles.input}
               value={userData.email}
             />
             <Text className="w-full mb-1">Fecha de nacimiento</Text>
-            <View className="flex-row items-center border-yellow border-[1rem] rounded-lg mb-3">
+            <View className="flex-row items-center border-yellow rounded-lg mb-3">
               <TextInput
                 className="flex-1 p-4"
                 placeholder="dd/mm/aaaa"
+                style={styles.input}
                 value={formatDate(userData.birthDate)}
                 editable={false}
               />
@@ -110,9 +118,10 @@ export default function Edit() {
             </View>
             <Text className="w-full mb-1">Descripción corta</Text>
             <TextInput
-              className="w-full p-4 border-yellow border-[1rem] rounded-lg mb-3"
+              className="w-full p-4 border-yellow rounded-lg mb-3"
               editable
               inputMode="text"
+              style={styles.input}
               multiline
               numberOfLines={4}
               maxLength={200}
@@ -134,6 +143,7 @@ export default function Edit() {
             </View>
           </View>
         </View>
+        </ScrollView>
       ) : (
         <View className="h-full w-full justify-center items-center">
           <ActivityIndicator size="large" color="#000000" />
@@ -142,3 +152,11 @@ export default function Edit() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  input: {
+    borderColor: "#F9CD14",
+    borderWidth: 1,
+    borderRadius: 10,
+  },
+});

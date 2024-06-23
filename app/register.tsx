@@ -8,6 +8,7 @@ import {
   Platform,
   Modal,
   Alert,
+  StyleSheet
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { router } from "expo-router";
@@ -99,22 +100,24 @@ export default function Register() {
       />
       <Text className="w-full mb-1">Nombre y Apellidos</Text>
       <TextInput
-        className="w-full p-4 border-yellow border-[1rem] rounded-lg mb-3"
+        className="w-full p-4 border-yellow rounded-lg mb-3"
         placeholder="Nombre y Apellidos"
         autoCapitalize="none"
+        style={styles.input}
         onChangeText={(text) => setName(text)}
       />
       <Text className="w-full mb-1">Correo</Text>
       <TextInput
-        className="w-full p-4 border-yellow border-[1rem] rounded-lg mb-3"
+        className="w-full p-4 border-yellow rounded-lg mb-3"
         placeholder="Correo Electrónico"
         keyboardType="email-address"
         autoCapitalize="none"
+        style={styles.input}
         onChangeText={(text) => setEmail(text)}
       />
       <View className="w-full">
         <Text className="w-full mb-1">Fecha de nacimiento</Text>
-        <View className="flex-row items-center border-yellow border-[1rem] rounded-lg mb-3">
+        <View className="flex-row items-center border-yellow rounded-lg mb-3" styles-={styles.input} >
           <TextInput
             className="flex-1 p-4"
             placeholder="dd/mm/aaaa"
@@ -145,7 +148,9 @@ export default function Register() {
         </Modal>
       </View>
       <Text className="w-full mb-1">Contraseña</Text>
-      <View className="w-full flex flex-row items-center border-yellow border-[1rem] rounded-lg mb-5">
+      <View className="w-full flex flex-row items-center border-yellow rounded-lg mb-5"
+        style={styles.input}
+       >
         <TextInput
           className="flex-1 p-4"
           placeholder="Contraseña"
@@ -181,3 +186,11 @@ export default function Register() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  input: {
+    borderColor: "#F9CD14",
+    borderWidth: 1,
+    borderRadius: 10,
+  },
+});

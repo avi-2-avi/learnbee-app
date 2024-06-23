@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   Alert,
+  StyleSheet
 } from "react-native";
 import { router } from "expo-router";
 import { useSession } from "../context/ctx";
@@ -74,13 +75,17 @@ export default function Login() {
         source={require("../assets/images/bee.png")}
       />
       <TextInput
-        className="w-full p-4 border-yellow border-[1rem] rounded-lg mb-4"
+        className="w-full p-4 border-yellow rounded-lg mb-4"
         placeholder="Correo Electrónico"
         keyboardType="email-address"
         autoCapitalize="none"
-        onChangeText={(text) => setEmail(text)}
+        style={styles.input}
+        onChangeText={(text) => setEmail(text)
+        }
       />
-      <View className="w-full flex flex-row items-center border-yellow border-[1rem] rounded-lg mb-2">
+      <View className="w-full flex flex-row items-center border-yellow rounded-lg mb-2" 
+        style={styles.input}
+      >
         <TextInput
           className="flex-1 p-4"
           placeholder="Contraseña"
@@ -116,3 +121,12 @@ export default function Login() {
     </View>
   );
 }
+
+
+const styles = StyleSheet.create({
+  input: {
+    borderColor: "#F9CD14",
+    borderWidth: 1,
+    borderRadius: 10,
+  },
+});

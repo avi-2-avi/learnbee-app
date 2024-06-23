@@ -10,6 +10,8 @@ import {
   TouchableOpacity,
   Alert,
   Image,
+  StyleSheet,
+  ScrollView,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -105,87 +107,93 @@ export default function Create() {
   return (
     <View className="w-full h-full bg-white">
       <AppBarBack />
-      <View className="flex flex-1 items-center justify-start w-[80%] mx-auto pt-10">
-        <Text className="w-full mb-1">Nombre</Text>
-        <TextInput
-          className="w-full p-4 border-yellow border-[1rem] rounded-lg mb-3"
-          placeholder="¿Cómo se llama el proyecto?"
-          onChangeText={(text) => setName(text)}
-        />
-        <Text className="w-full mb-1">Descripción</Text>
-        <TextInput
-          className="w-full p-4 border-yellow border-[1rem] rounded-lg mb-3"
-          placeholder="¿De que se trata tu proyecto?"
-          editable
-          inputMode="text"
-          multiline
-          numberOfLines={4}
-          maxLength={200}
-          onChangeText={(text) => setDescription(text)}
-        />
-        <Text className="w-full mb-1">Curso</Text>
-        <TouchableOpacity
-          className="w-full"
-          onPress={handleOpenModal}
-          activeOpacity={1}
-        >
+      <ScrollView>
+        <View className="flex flex-1 items-center justify-start w-[80%] mx-auto pt-10">
+          <Text className="w-full mb-1">Nombre</Text>
           <TextInput
-            className="w-full p-4 border-yellow border-[1rem] rounded-lg mb-3"
-            placeholder="¿A qué curso pertenece?"
-            value={
-              selectedCourse
-                ? courses.find((course) => course.value === selectedCourse)
-                    ?.label
-                : ""
-            }
-            editable={false}
-            pointerEvents="none"
+            className="w-full p-4 border-yellow rounded-lg mb-3"
+            placeholder="¿Cómo se llama el proyecto?"
+            style={styles.input}
+            onChangeText={(text) => setName(text)}
           />
-        </TouchableOpacity>
-        <Text className="w-full mb-1">Tema</Text>
-        <TextInput
-          className="w-full p-4 border-yellow border-[1rem] rounded-lg mb-3"
-          placeholder="¿Qué tema abarca tu curso?"
-          onChangeText={(text) => setTopic(text)}
-        />
-        <Text className="w-full mb-3">Contenido multimedia</Text>
-        <View className="w-full flex flex-row space-x-4 justify-start">
-          <CustomButton
-            onPress={takePicture}
-            type="secondary"
-            className="basis-20"
-          >
-            <Ionicons name="camera-outline" size={40} color="black" />
-          </CustomButton>
-          <CustomButton
-            onPress={pickImage}
-            type="secondary"
-            className="basis-20"
-          >
-            <Ionicons name="image-sharp" size={40} color="black" />
-          </CustomButton>
-        </View>
-        {imageUri && (
-          <Image
-            source={{ uri: imageUri }}
-            style={{ width: 100, height: 100, marginBottom: 10 }}
-            className="mt-4"
+          <Text className="w-full mb-1">Descripción</Text>
+          <TextInput
+            className="w-full p-4 border-yellow rounded-lg mb-3"
+            placeholder="¿De que se trata tu proyecto?"
+            editable
+            style={styles.input}
+            inputMode="text"
+            multiline
+            numberOfLines={4}
+            maxLength={200}
+            onChangeText={(text) => setDescription(text)}
           />
-        )}
-        <View className="flex flex-row space-x-6 mt-8">
-          <CustomButton
-            onPress={handleGoBack}
-            type="secondary"
-            title="Cancelar"
-            className="basis-1/2"
-          ></CustomButton>
-          <CustomButton
-            onPress={handleCreate}
-            title="Crear"
-            className="basis-1/2"
-          ></CustomButton>
+          <Text className="w-full mb-1">Curso</Text>
+          <TouchableOpacity
+            className="w-full"
+            onPress={handleOpenModal}
+            activeOpacity={1}
+          >
+            <TextInput
+              className="w-full p-4 border-yellow rounded-lg mb-3"
+              placeholder="¿A qué curso pertenece?"
+              style={styles.input}
+              value={
+                selectedCourse
+                  ? courses.find((course) => course.value === selectedCourse)
+                      ?.label
+                  : ""
+              }
+              editable={false}
+              pointerEvents="none"
+            />
+          </TouchableOpacity>
+          <Text className="w-full mb-1">Tema</Text>
+          <TextInput
+            className="w-full p-4 border-yellow rounded-lg mb-3"
+            placeholder="¿Qué tema abarca tu curso?"
+            style={styles.input}
+            onChangeText={(text) => setTopic(text)}
+          />
+          <Text className="w-full mb-3">Contenido multimedia</Text>
+          <View className="w-full flex flex-row space-x-4 justify-start">
+            <CustomButton
+              onPress={takePicture}
+              type="secondary"
+              className="basis-20"
+            >
+              <Ionicons name="camera-outline" size={40} color="black" />
+            </CustomButton>
+            <CustomButton
+              onPress={pickImage}
+              type="secondary"
+              className="basis-20"
+            >
+              <Ionicons name="image-sharp" size={40} color="black" />
+            </CustomButton>
+          </View>
+          {imageUri && (
+            <Image
+              source={{ uri: imageUri }}
+              style={{ width: 100, height: 100, marginBottom: 10 }}
+              className="mt-4"
+            />
+          )}
+          <View className="flex flex-row space-x-6 mt-8 mb-4">
+            <CustomButton
+              onPress={handleGoBack}
+              type="secondary"
+              title="Cancelar"
+              className="basis-1/2"
+            ></CustomButton>
+            <CustomButton
+              onPress={handleCreate}
+              title="Crear"
+              className="basis-1/2"
+            ></CustomButton>
+          </View>
         </View>
-      </View>
+      </ScrollView>
       <Modal
         visible={isModalVisible}
         transparent={true}
@@ -226,3 +234,11 @@ export default function Create() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  input: {
+    borderColor: "#F9CD14",
+    borderWidth: 1,
+    borderRadius: 10,
+  },
+});
