@@ -1,26 +1,60 @@
 import { AppBarBack } from "@/components/common/AppBarBack";
 import { CustomButton } from "@/components/common/CustomButton";
 import { router } from "expo-router";
-import { useState } from "react";
-import { Text, View, TextInput, Modal, TouchableOpacity } from "react-native";
+import { Key, useState } from "react";
+import {
+  Text,
+  View,
+  TextInput,
+  Modal,
+  TouchableOpacity,
+  Alert,
+  Image,
+} from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { courses } from "@/assets/constants/courses";
+import { publishProject } from "@/hooks/projectActions";
+import * as ImagePicker from "expo-image-picker";
+import { useUserId } from "@/hooks/userUserId";
 
 export default function Create() {
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
+  const [topic, setTopic] = useState<string | undefined>("");
   const [selectedCourse, setSelectedCourse] = useState<string | undefined>(
     undefined,
   );
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [imageUri, setImageUri] = useState<string | null>(null);
+  const uid = useUserId();
 
   const handleGoBack = () => {
     router.back();
   };
 
-  const handleGoNext = () => {
-    router.navigate("(post)/survey");
+  const handleCreate = async () => {
+    if (!name || !description || !selectedCourse || !topic) {
+      Alert.alert("Error", "Todos los campos deben estar llenos.");
+      return;
+    }
+
+    const project = {
+      name,
+      description,
+      topic,
+      course: selectedCourse!,
+      imageUri,
+      rating: null,
+      user_id: uid,
+    };
+    try {
+      await publishProject(project);
+      Alert.alert("Enhorabuena", "Su proyecto a sido creado");
+      router.navigate("(post)/survey");
+    } catch (error) {
+      Alert.alert("Error", "La creación de su proyecto no ha sido exitosa.");
+    }
   };
 
   const handleOpenModal = () => {
@@ -33,6 +67,39 @@ export default function Create() {
 
   const handleCourseSelect = (course: string) => {
     setSelectedCourse(course);
+  };
+
+  const takePicture = async () => {
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+    if (!permissionResult.granted) {
+      Alert.alert("Error", "Permission to access camera is required!");
+      return;
+    }
+    const result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+    if (!result.canceled) {
+      setImageUri(result.assets[0].uri);
+    }
+  };
+
+  const pickImage = async () => {
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permissionResult.granted) {
+      Alert.alert("Error", "Permission to access media library is required!");
+      return;
+    }
+    const result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+    if (!result.canceled) {
+      setImageUri(result.assets[0].uri);
+    }
   };
 
   return (
@@ -79,26 +146,33 @@ export default function Create() {
         <TextInput
           className="w-full p-4 border-yellow border-[1rem] rounded-lg mb-3"
           placeholder="¿Qué tema abarca tu curso?"
-          onChangeText={(text) => setDescription(text)}
+          onChangeText={(text) => setTopic(text)}
         />
         <Text className="w-full mb-3">Contenido multimedia</Text>
         <View className="w-full flex flex-row space-x-4 justify-start">
           <CustomButton
-            onPress={handleGoBack}
+            onPress={takePicture}
             type="secondary"
             className="basis-20"
           >
             <Ionicons name="camera-outline" size={40} color="black" />
           </CustomButton>
           <CustomButton
-            onPress={handleGoNext}
+            onPress={pickImage}
             type="secondary"
             className="basis-20"
           >
             <Ionicons name="image-sharp" size={40} color="black" />
           </CustomButton>
         </View>
-        <View className="flex flex-row space-x-6 mt-28">
+        {imageUri && (
+          <Image
+            source={{ uri: imageUri }}
+            style={{ width: 100, height: 100, marginBottom: 10 }}
+            className="mt-4"
+          />
+        )}
+        <View className="flex flex-row space-x-6 mt-8">
           <CustomButton
             onPress={handleGoBack}
             type="secondary"
@@ -106,8 +180,8 @@ export default function Create() {
             className="basis-1/2"
           ></CustomButton>
           <CustomButton
-            onPress={handleGoNext}
-            title="Siguiente"
+            onPress={handleCreate}
+            title="Crear"
             className="basis-1/2"
           ></CustomButton>
         </View>
@@ -127,17 +201,22 @@ export default function Create() {
               selectedValue={selectedCourse}
               onValueChange={(itemValue) => handleCourseSelect(itemValue)}
             >
-              {courses.map((course) => (
-                <Picker.Item
-                  key={course.value}
-                  label={course.label}
-                  value={course.value}
-                />
-              ))}
+              {courses.map(
+                (course: {
+                  value: Key | null | undefined;
+                  label: string | undefined;
+                }) => (
+                  <Picker.Item
+                    key={course.value}
+                    label={course.label}
+                    value={course.value}
+                  />
+                ),
+              )}
             </Picker>
             <CustomButton
               onPress={handleCloseModal}
-              title="Cerrar"
+              title="Seleccionar"
               type="primary"
               className="mt-4 w-2/3 mx-auto"
             ></CustomButton>
