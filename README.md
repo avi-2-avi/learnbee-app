@@ -1,50 +1,50 @@
-# Welcome to your Expo app 👋
+# LearnBee App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Este es un proyecto de [Expo](https://expo.dev) creado con [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
-## Get started
+## Descripción de la Aplicación
 
-1. Install dependencies
+Esta aplicación permite a los profesores crear y gestionar proyectos, incluyendo la posibilidad de añadir imágenes, descripciones detalladas y realizar evaluaciones mediante encuestas estudiantiles. Está diseñada para facilitar la organización y la recopilación de feedback sobre diversos proyectos.
 
-   ```bash
-   npm install
-   ```
+## Empezar
 
-2. Start the app
-
-   ```bash
-    npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+### 1. Instalar dependencias
 
 ```bash
-npm run reset-project
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2. Iniciar la aplicación
 
-## Learn more
+```bash
+npx expo start
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+En la salida, encontrarás opciones para abrir la aplicación en:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- [build de desarrollo](https://docs.expo.dev/develop/development-builds/introduction/)
+- [emulador de Android](https://docs.expo.dev/workflow/android-studio-emulator/)
+- [simulador de iOS](https://docs.expo.dev/workflow/ios-simulator/)
+- [Expo Go](https://expo.dev/go), un entorno limitado para probar el desarrollo de aplicaciones con Expo
 
-## Join the community
+Puedes comenzar a desarrollar editando los archivos dentro del directorio **app**. Este proyecto utiliza [rutas basadas en archivos](https://docs.expo.dev/router/introduction).
 
-Join our community of developers creating universal apps.
+## Funcionalidades Principales
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- **Crear Proyectos**: Los profesores pueden crear proyectos con un nombre, descripción, curso, tema y subir una imagen asociada.
+- **Gestión de Proyectos**: Los profesores pueden ver sus proyectos en progreso y los ya evaluados.
+- **Evaluaciones**: Los estudiantes pueden evaluar los proyectos mediante encuestas, proporcionando feedback útil para el creador del proyecto.
+- **Gestión de Usuarios**: Los profesores pueden registrarse, iniciar sesión y gestionar su perfil.
+
+## Aprender más
+
+Para aprender más sobre el desarrollo de tu proyecto con Expo, consulta los siguientes recursos:
+
+- [Documentación de Expo](https://docs.expo.dev/): Aprende los fundamentos o explora temas avanzados con nuestras [guías](https://docs.expo.dev/guides).
+- [Tutorial de Expo](https://docs.expo.dev/tutorial/introduction/): Sigue un tutorial paso a paso donde crearás un proyecto que se ejecuta en Android, iOS y la web.
+
+## Instrucciones Adicionales
+
+### Variables de Entorno
+
+Asegúrate de configurar las variables de entorno necesarias para el proyecto, incluyendo las credenciales de Firebase. Puedes utilizar un archivo `.env` para gestionar estas variables. Por ello, utiliza .env.sample y cambiale de nombre con tus credenciales de Firebase.
