@@ -48,12 +48,13 @@ export default function Create() {
       course: selectedCourse!,
       imageUri,
       rating: null,
-      user_id: uid,
+      userId: uid,
+      numStudents: null,
     };
     try {
-      await publishProject(project);
+      const projectId = await publishProject(project);
       Alert.alert("Enhorabuena", "Su proyecto a sido creado");
-      router.navigate("(post)/survey");
+      router.navigate("(survey)/" + projectId);
     } catch (error) {
       Alert.alert("Error", "La creación de su proyecto no ha sido exitosa.");
     }

@@ -1,20 +1,36 @@
 import { AppBarBack } from "@/components/common/AppBarBack";
 import { CustomButton } from "@/components/common/CustomButton";
+import { updateProject } from "@/hooks/projectActions";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
-import { Image, View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  Image,
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from "react-native";
 
 export default function Survey() {
   const [numStudents, setNumStudents] = useState<number>(0);
   const [showQR, setShowQR] = useState<boolean>(false);
+  const { id } = useLocalSearchParams<{ id: string }>();
 
   const handleGoBack = () => {
-    router.back();
+    router.replace("(app)");
   };
 
-  const handlePublish = () => {
-    router.replace("(app)");
+  const handlePublish = async () => {
+    const rating = Math.floor(Math.random() * 5) + 1;
+    try {
+      await updateProject(id!, numStudents, rating);
+      Alert.alert("Enhorabuena", "Su proyecto a sido publicado");
+      router.replace("(app)");
+    } catch (error) {
+      Alert.alert("Error", "No se ha podido publicar su proyecto.");
+    }
   };
 
   const handleAddNumStudents = () => {

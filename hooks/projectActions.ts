@@ -9,7 +9,8 @@ type Project = {
   course: string;
   imageUri: string | null;
   rating: number | null;
-  user_id: string | null | undefined;
+  userId: string | null | undefined;
+  numStudents: number | null;
 };
 
 const uploadImageToStorage = async (
@@ -42,8 +43,27 @@ export const publishProject = async (project: Project) => {
     await updateDoc(doc(db, "projects", docRef.id), { imageUri: imageUrl });
 
     console.log("Project updated with image URL");
+    return docRef.id;
   } catch (e) {
     console.error("Error adding document: ", e);
+    throw e;
+  }
+};
+
+export const updateProject = async (
+  projectId: string,
+  numStudents: number,
+  rating: number,
+) => {
+  try {
+    const projectRef = doc(db, "projects", projectId);
+    await updateDoc(projectRef, {
+      numStudents,
+      rating,
+    });
+    console.log("Project updated with new rating and number of students");
+  } catch (e) {
+    console.error("Error updating project: ", e);
     throw e;
   }
 };

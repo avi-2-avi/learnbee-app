@@ -41,7 +41,7 @@ export const AppBar = () => {
       <View>
         <View className="bg-yellow w-full h-10"></View>
         <View className="bg-yellow w-full h-18 flex flex-row justify-center items-center px-10 pt-4 pb-6 rounded-b-full shadow-md">
-          <ActivityIndicator size="large" color="#0000ff" />
+          <ActivityIndicator size="large" color="#000000" />
         </View>
       </View>
     );
