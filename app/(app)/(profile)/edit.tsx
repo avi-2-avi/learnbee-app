@@ -1,23 +1,33 @@
 import { AppBarBack } from "@/components/common/AppBarBack";
 import { CustomButton } from "@/components/common/CustomButton";
-import { updateUserDescription } from "@/hooks/userActions";
+import { updateUserData } from "@/hooks/userActions";
 import { useUserData } from "@/hooks/userData";
 import { useUserId } from "@/hooks/userUserId";
-import { user } from "@/test/user";
 import { formatDate } from "@/utils/formatDate";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { View, Image, Text, TextInput, ActivityIndicator } from "react-native";
+import {
+  View,
+  Image,
+  Text,
+  TextInput,
+  ActivityIndicator,
+  TouchableOpacity,
+} from "react-native";
+import * as ImagePicker from "expo-image-picker";
+import { uploadUserProfilePicture } from "@/hooks/userActions";
 
 export default function Edit() {
-  const { userData, loading } = useUserData();
+  const { userData } = useUserData();
+  const [photo, setPhoto] = useState<string>(userData?.photo || "");
   const [description, setDescription] = useState<string>("");
   const uid = useUserId();
 
   useEffect(() => {
     if (userData) {
       setDescription(userData.description);
+      setPhoto(userData.photo);
     }
   }, [userData]);
 
@@ -28,11 +38,34 @@ export default function Edit() {
   const handleSaveChanges = async () => {
     if (userData && uid) {
       try {
-        await updateUserDescription(uid, description);
+        let photoURL: string | null = userData.photo;
+        if (photo !== userData.photo) {
+          photoURL = await uploadUserProfilePicture(uid, photo);
+        }
+        await updateUserData(uid, description, photoURL);
         router.back();
       } catch (error) {
         console.error("Error updating description: ", error);
       }
+    }
+  };
+
+  const pickImage = async () => {
+    let result = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (result.granted === false) {
+      alert("Permission to access gallery is required!");
+      return;
+    }
+
+    let pickerResult = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!pickerResult.canceled) {
+      setPhoto(pickerResult.assets[0].uri);
     }
   };
 
@@ -42,11 +75,13 @@ export default function Edit() {
       {userData ? (
         <View>
           <View className="flex flex-col mx-auto mt-8 mb-8">
-            <Image
-              className="w-20 h-20 rounded-full"
-              source={{ uri: userData.photo }}
-            />
-            <Text className="font-medium mt-2 text-center">Cambiar foto</Text>
+            <TouchableOpacity onPress={pickImage}>
+              <Image
+                className="w-20 h-20 rounded-full"
+                source={{ uri: photo || userData.photo }}
+              />
+              <Text className="font-medium mt-2 text-center">Cambiar foto</Text>
+            </TouchableOpacity>
           </View>
           <View className="w-[80%] mx-auto mb-4 mt-2">
             <Text className="w-full mb-1">Nombre y Apellidos</Text>
