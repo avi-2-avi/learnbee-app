@@ -5,9 +5,10 @@ import { styled } from "nativewind";
 import { RatingIcons } from "./RatingIcons";
 
 interface PostItemProps {
+  userPhoto: string;
   photo: string;
   name: string;
-  rating: number;
+  rating: number | null;
   title: string;
   description: string;
   isInProgress?: boolean;
@@ -17,6 +18,7 @@ const StyledText = styled(Text);
 
 export const PostItem: React.FC<PostItemProps> = ({
   photo,
+  userPhoto,
   name,
   rating,
   title,
@@ -31,7 +33,7 @@ export const PostItem: React.FC<PostItemProps> = ({
             <Image
               className="w-12 h-12 rounded-full"
               source={{
-                uri: photo,
+                uri: userPhoto,
               }}
             />
             <View className="flex flex-col">
@@ -39,7 +41,7 @@ export const PostItem: React.FC<PostItemProps> = ({
             </View>
           </View>
           {!isInProgress ? (
-            <RatingIcons rating={rating} />
+            <RatingIcons rating={rating!} />
           ) : (
             <View className="flex flex-row items-center">
               <Ionicons name="ellipsis-vertical" size={16} color="black" />

@@ -49,12 +49,18 @@ export default function Create() {
       imageUri,
       rating: null,
       userId: uid,
+      userName: null,
+      userImage: null,
       numStudents: null,
     };
     try {
-      const projectId = await publishProject(project);
-      Alert.alert("Enhorabuena", "Su proyecto a sido creado");
-      router.navigate("(survey)/" + projectId);
+      if (uid) {
+        const projectId = await publishProject(uid, project);
+        Alert.alert("Enhorabuena", "Su proyecto a sido creado");
+        router.navigate("(survey)/" + projectId);
+      } else {
+        Alert.alert("Error", "La creación de su proyecto no ha sido exitosa.");
+      }
     } catch (error) {
       Alert.alert("Error", "La creación de su proyecto no ha sido exitosa.");
     }

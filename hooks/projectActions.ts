@@ -1,8 +1,18 @@
 import { db, storage } from "../firebaseConfig";
-import { collection, addDoc, doc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  doc,
+  updateDoc,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { fetchUserById } from "./userActions";
 
-type Project = {
+export type Project = {
+  id?: string;
   name: string;
   description: string;
   topic: string;
@@ -11,6 +21,8 @@ type Project = {
   rating: number | null;
   userId: string | null | undefined;
   numStudents: number | null;
+  userImage?: string;
+  userName?: string;
 };
 
 const uploadImageToStorage = async (
@@ -25,8 +37,19 @@ const uploadImageToStorage = async (
   return downloadURL;
 };
 
-export const publishProject = async (project: Project) => {
+export const publishProject = async (
+  userId: string,
+  projectData: Project,
+): Promise<string> => {
   try {
+    const user = await fetchUserById(userId);
+    if (!user) throw new Error("User not found");
+
+    const project = {
+      ...projectData,
+      userId,
+    };
+
     const docRef = await addDoc(collection(db, "projects"), {
       ...project,
       imageUri: null, // Placeholder for the image URL
@@ -64,6 +87,66 @@ export const updateProject = async (
     console.log("Project updated with new rating and number of students");
   } catch (e) {
     console.error("Error updating project: ", e);
+    throw e;
+  }
+};
+
+export const fetchProjects = async (
+  isInProgress: boolean,
+  fromUser: boolean,
+  userId?: string,
+): Promise<Project[]> => {
+  try {
+    const projectsCollection = collection(db, "projects");
+    let q;
+
+    console.log(
+      `isInProgress: ${isInProgress}, fromUser: ${fromUser}, userId: ${userId}`,
+    );
+
+    if (isInProgress && fromUser && userId) {
+      q = query(
+        projectsCollection,
+        where("rating", "==", null),
+        where("userId", "==", userId),
+      );
+      console.log("Query: isInProgress && fromUser && userId");
+    } else if (isInProgress) {
+      q = query(projectsCollection, where("rating", "==", null));
+      console.log("Query: isInProgress");
+    } else if (fromUser && userId) {
+      q = query(
+        projectsCollection,
+        where("rating", "!=", null),
+        where("userId", "==", userId),
+      );
+      console.log("Query: fromUser && userId");
+    } else {
+      q = query(projectsCollection, where("rating", "!=", null));
+      console.log("Query: default");
+    }
+
+    const querySnapshot = await getDocs(q);
+    const projects = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...(doc.data() as Omit<Project, "id">),
+    }));
+
+    // Fetch user details for each project
+    const projectsWithUserDetails = await Promise.all(
+      projects.map(async (project) => {
+        const user = await fetchUserById(project.userId!);
+        return {
+          ...project,
+          userName: user?.name,
+          userImage: user?.photo,
+        };
+      }),
+    );
+
+    return projectsWithUserDetails;
+  } catch (e) {
+    console.error("Error fetching projects: ", e);
     throw e;
   }
 };

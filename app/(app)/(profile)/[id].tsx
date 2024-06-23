@@ -16,11 +16,11 @@ import { useUserData } from "@/hooks/userData";
 
 const Tab = createMaterialTopTabNavigator();
 function CompletedProjects() {
-  return <PostList useFullScreenHeight />;
+  return <PostList fromUser useFullScreenHeight />;
 }
 
 function OngoingProjects() {
-  return <PostList useFullScreenHeight isInProgress />;
+  return <PostList fromUser useFullScreenHeight isInProgress />;
 }
 
 export default function DetailsScreen() {
