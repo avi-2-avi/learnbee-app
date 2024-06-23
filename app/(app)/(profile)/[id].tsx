@@ -1,12 +1,19 @@
 import { useLocalSearchParams } from "expo-router";
-import { View, Text, Share, Alert, Image, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  Share,
+  Alert,
+  Image,
+  ActivityIndicator,
+} from "react-native";
 import { router } from "expo-router";
 import { AppBarBack } from "@/components/common/AppBarBack";
 import { useState } from "react";
 import { CustomButton } from "@/components/common/CustomButton";
-import { user } from "@/test/user";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { PostList } from "@/components/posts/PostList";
+import { useUserData } from "@/hooks/userData";
 
 const Tab = createMaterialTopTabNavigator();
 function CompletedProjects() {
@@ -21,7 +28,7 @@ export default function DetailsScreen() {
   const [totalProjects, setTotalProjects] = useState(10);
   const [followers, setFollowers] = useState(136);
   const [followings, setFollowings] = useState(136);
-  const { id } = useLocalSearchParams();
+  const { userData, loading } = useUserData();
 
   const handleGoProfile = () => {
     router.navigate("(profile)/edit");
@@ -49,24 +56,24 @@ export default function DetailsScreen() {
     }
   };
 
-  const handleGoBack = () => {
-    router.back();
-  };
-
   return (
     <View className="bg-white w-full h-full">
       <AppBarBack />
       <View className="w-[80%] mx-auto mb-4 mt-2">
-        <View className="flex flex-row space-x-6">
-          <Image
-            className="w-20 h-20 rounded-full"
-            source={{ uri: user.photo }}
-          />
-          <View className="flex flex-col justify-center">
-            <Text className="font-medium">{user.name}</Text>
-            <Text className="font-light mt-2">{user.description}</Text>
+        {userData ? (
+          <View className="flex flex-row space-x-6">
+            <Image
+              className="w-20 h-20 rounded-full"
+              source={{ uri: userData.photo }}
+            />
+            <View className="flex flex-col justify-center">
+              <Text className="font-medium">{userData.name}</Text>
+              <Text className="font-light mt-2">{userData.description}</Text>
+            </View>
           </View>
-        </View>
+        ) : (
+          <ActivityIndicator size="large" color="#000000" />
+        )}
       </View>
       <View className="flex flex-row justify-around w-[80%] mx-auto text-center">
         <View>

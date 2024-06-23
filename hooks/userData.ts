@@ -5,8 +5,10 @@ import { useUserId } from "./userUserId";
 
 type UserData = {
   name: string;
+  email: string;
   description: string;
   photo: string;
+  birthDate: string;
 };
 
 export function useUserData() {
