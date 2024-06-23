@@ -44,7 +44,7 @@ export default function Edit() {
           <View className="flex flex-col mx-auto mt-8 mb-8">
             <Image
               className="w-20 h-20 rounded-full"
-              source={{ uri: user.photo }}
+              source={{ uri: userData.photo }}
             />
             <Text className="font-medium mt-2 text-center">Cambiar foto</Text>
           </View>
@@ -100,7 +100,9 @@ export default function Edit() {
           </View>
         </View>
       ) : (
-        <ActivityIndicator size="large" color="#000000" />
+        <View className="h-full w-full justify-center items-center">
+          <ActivityIndicator size="large" color="#000000" />
+        </View>
       )}
     </View>
   );
