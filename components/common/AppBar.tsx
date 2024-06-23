@@ -5,20 +5,24 @@ import {
   TouchableOpacity,
   Modal,
   Text,
+  ActivityIndicator,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
 import { useSession } from "@/context/ctx";
 import { CustomButton } from "./CustomButton";
-import { user } from "@/test/user";
 import { router } from "expo-router";
 import { NotificationItem } from "../homepage/NotificationItem";
 import { notifications } from "@/test/notifications";
+import { useUserData } from "@/hooks/userData";
+import { useUserId } from "@/hooks/userUserId";
 
 export const AppBar = () => {
   const { signOut } = useSession();
+  const { userData, loading } = useUserData();
   const [profileMenuVisible, setProfileMenuVisible] = useState(false);
   const [notificationMenuVisible, setNotificationMenuVisible] = useState(false);
+  const uid = useUserId();
 
   const handleSignOut = () => {
     signOut();
@@ -26,9 +30,22 @@ export const AppBar = () => {
   };
 
   const handleGotoProfile = () => {
-    router.navigate("(profile)/" + user.id);
-    setProfileMenuVisible(false);
+    if (uid) {
+      router.navigate("(profile)/" + uid);
+      setProfileMenuVisible(false);
+    }
   };
+
+  if (loading) {
+    return (
+      <View>
+        <View className="bg-yellow w-full h-10"></View>
+        <View className="bg-yellow w-full h-18 flex flex-row justify-center items-center px-10 pt-4 pb-6 rounded-b-full shadow-md">
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View>
@@ -58,21 +75,29 @@ export const AppBar = () => {
           className="flex-1 bg-black/30 justify-end"
         >
           <View className="absolute left-10 top-24 bg-white p-5 w-[70%] rounded-lg">
-            <View className="flex flex-row items-center space-x-4 mb-4">
-              <Image
-                className="w-12 h-12 rounded-full"
-                source={{ uri: user.photo }}
-              />
-              <View className="flex flex-col">
-                <Text className="font-medium">{user.name}</Text>
-                <Text className="text-xs mt-0.5">{user.description}</Text>
-              </View>
-            </View>
-            <CustomButton
-              onPress={handleGotoProfile}
-              flatten
-              title="Ver Perfil"
-            />
+            {userData ? (
+              <>
+                <View className="flex flex-row items-center space-x-4 mb-4">
+                  <Image
+                    className="w-12 h-12 rounded-full"
+                    source={{ uri: userData.photo }}
+                  />
+                  <View className="flex flex-col">
+                    <Text className="font-medium">{userData.name}</Text>
+                    <Text className="text-xs mt-0.5">
+                      {userData.description}
+                    </Text>
+                  </View>
+                </View>
+                <CustomButton
+                  onPress={handleGotoProfile}
+                  flatten
+                  title="Ver Perfil"
+                />
+              </>
+            ) : (
+              <Text>Cargando data del usuario...</Text>
+            )}
             <Text></Text>
             <CustomButton
               flatten
